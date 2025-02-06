@@ -1,0 +1,13 @@
+services:
+
+  wordpress:
+    image: wordpress
+    volumes:
+      - /cloud-1/wordpress:/wordpress
+
+  nginx:
+    image: nginx
+    ports:
+      - 80:80
+    volumes:
+      - /cloud-1/wordpress:/wordpress
