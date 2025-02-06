@@ -1,0 +1,9 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for up
+
+- name: 'Going to the World Wide Web'
+  community.docker.docker_compose_v2:
+    project_src: /cloud-1
+    remove_orphans: true
+    state: present

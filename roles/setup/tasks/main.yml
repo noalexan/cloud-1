@@ -1,0 +1,27 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for setup
+
+- name: Create app directory
+  ansible.builtin.file:
+    path: /cloud-1
+    state: directory
+
+- name: Upload docker-compose.yml
+  copy:
+    src: docker-compose.yml
+    dest: /cloud-1
+
+- name: Upload environment
+  copy:
+    src: .env
+    dest: /cloud-1
+
+- name: Upload Nginx configuration
+  copy:
+    src: nginx.conf
+    dest: /cloud-1
+
+- name: Pull containers
+  community.docker.docker_compose_v2_pull:
+    project_src: /cloud-1

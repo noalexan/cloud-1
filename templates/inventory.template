@@ -1,5 +1,10 @@
-{% for host in hosts %}{{host.name}}:
+{% for host in hosts %}
+{{host.name}}:
   hosts:
-    {% for droplet in host.droplets %}{{droplet.name}}:
+{% for droplet in host.droplets %}
+    {{droplet.name}}:
       ansible_host: {{droplet.networks.v4[0].ip_address}}
-{% endfor %}{% endfor %}
+{% endfor %}
+{% endfor %}
+  vars:
+    ansible_user: {{ansible_user}}

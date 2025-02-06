@@ -1,61 +1,7 @@
-- name: Install docker
-  hosts: myhosts
-  tasks:
-    - name: Install required system packages
-      apt:
-        pkg:
-        - apt-transport-https
-        - ca-certificates
-        - curl
-        - software-properties-common
-        state: latest
-        update_cache: true
-
-    - name: Add Docker GPG apt Key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-
-    - name: Add Docker Repository
-      apt_repository:
-        repo: deb https://download.docker.com/linux/ubuntu focal stable
-        state: present
-
-    - name: Update apt and install docker-ce
-      apt:
-        name: docker-ce
-        state: latest
-        update_cache: true
-
-- name: Setup project
-  hosts: myhosts
-  tasks:
-    - name: Create app directory
-      ansible.builtin.file:
-        path: /cloud-1
-        state: directory
-
-    - name: Upload docker-compose.yml
-      copy:
-        src: docker-compose.yml
-        dest: /cloud-1/docker-compose.yml
-
-    - name: Up containers
-      community.docker.docker_compose_v2_pull:
-        project_src: /cloud-1
-
-- name: Going to the World Wide Web
-  hosts: myhosts
-  tasks:
-    - name: Up containers
-      community.docker.docker_compose_v2:
-        project_src: /cloud-1
-        state: present
-
-- name: Get back into bed
-  hosts: myhosts
-  tasks:
-    - name: Down containers
-      community.docker.docker_compose_v2:
-        project_src: /cloud-1
-        state: absent
+---
+- hosts: all
+  roles:
+    - install_docker
+    - setup
+    - down
+    - up

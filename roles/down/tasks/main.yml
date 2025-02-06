@@ -1,0 +1,8 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for down
+
+- name: Get back to deb
+  community.docker.docker_compose_v2:
+    project_src: /cloud-1
+    state: absent

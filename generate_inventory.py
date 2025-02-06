@@ -1,3 +1,4 @@
+import json
 import os
 import requests
 
@@ -19,13 +20,15 @@ headers = {
     'Authorization': f'Bearer {token}'
 }
 
-response = requests.get(endpoint, headers=headers)
+response = requests.get(endpoint, params={'tag_name': 'noalexan'}, headers=headers)
 
 if not response.status_code == 200:
     print(f"Error: {response.status_code}")
     print(response.text)
 else:
     data = response.json()
+    for droplet in data['droplets']:
+        droplet['networks']['v4'] = [network for network in droplet['networks']['v4'] if network['type'] == 'public'][:1]
 
 print('done')
 
@@ -39,10 +42,11 @@ template = environment.get_template("inventory.template")
 content = template.render(
     hosts=[
         {
-            "name": "myhosts",
+            "name": "app",
             **data
         }
-    ]
+    ],
+    ansible_user="root"
 )
 
 with open("inventory.yml", "w+") as file:

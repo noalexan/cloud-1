@@ -1,13 +1,46 @@
 services:
 
-  wordpress:
-    image: wordpress
-    volumes:
-      - /cloud-1/wordpress:/wordpress
-
   nginx:
-    image: nginx
+    image: jonasal/nginx-certbot
+    environment:
+      - CERTBOT_EMAIL=abc@yopmail.com
     ports:
       - 80:80
+      - 443:443
+      - 8080:8080
     volumes:
-      - /cloud-1/wordpress:/wordpress
+      - certificates:/etc/letsencrypt
+      - wordpress:/var/www/html
+      - ./nginx.conf:/etc/nginx/conf.d/server.conf
+
+  wordpress:
+    image: wordpress:php8.3-fpm
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: database
+      WORDPRESS_DB_USER: exampleuser
+      WORDPRESS_DB_PASSWORD: examplepass
+      WORDPRESS_DB_NAME: exampledb
+    volumes:
+      - wordpress:/usr/src/wordpress
+
+  phpmyadmin:
+    image: phpmyadmin
+    environment:
+      - PMA_HOST=database
+
+  database:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: exampledb
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - database:/var/lib/mysql
+
+volumes:
+  wordpress:
+  database:
+  certificates:
