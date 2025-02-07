@@ -19,7 +19,7 @@
 
 - name: Upload Nginx configuration
   copy:
-    src: nginx.conf
+    src: nginx_conf.d
     dest: /cloud-1
 
 - name: Pull containers
