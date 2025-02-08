@@ -1,0 +1,45 @@
+---
+services:
+  mysql_db:
+    container_name: mysql_container
+    image: "mysql:5.7"
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - mysql:/var/lib/mysql
+
+  wordpress:
+    container_name: wordpress_container
+    depends_on:
+      - mysql_db
+    image: "wordpress:latest"
+    restart: always
+    ports:
+      - "${WORDPRESS_PORT}:80"
+    environment:
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+    volumes:
+      - ./wordpress:/var/www/html
+
+  phpmyadmin:
+    container_name: phpmyadmin_container
+    depends_on:
+      - mysql_db
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "${PHPMYADMIN_PORT}:80"
+    environment:
+      PMA_HOST: ${PMA_HOST}
+      MYSQL_ROOT_PASSWORD: ${PMA_ROOT_PASSWORD}
+
+volumes:
+  mysql:
+
