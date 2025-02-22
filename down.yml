@@ -1,0 +1,10 @@
+#SPDX-License-Identifier: MIT-0
+---
+
+- hosts: all
+  tasks:
+    - name: 'Going back to the bed'
+      community.docker.docker_compose_v2:
+        project_src: /cloud-1
+        remove_orphans: true
+        state: absent

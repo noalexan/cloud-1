@@ -20,7 +20,7 @@ headers = {
     'Authorization': f'Bearer {token}'
 }
 
-response = requests.get(endpoint, params={'tag_name': 'mayoub'}, headers=headers)
+response = requests.get(endpoint, params={'tag_name': 'noalexan'}, headers=headers)
 
 if not response.status_code == 200:
     print(f"Error: {response.status_code}")
@@ -42,7 +42,7 @@ template = environment.get_template("inventory.j2")
 content = template.render(
     hosts=[
         {
-            "name": "app",
+            "name": "DigitalOcean",
             **data
         }
     ],

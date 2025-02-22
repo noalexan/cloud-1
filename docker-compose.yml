@@ -1,47 +1,49 @@
+# docker-compose.yml
+
 services:
 
   nginx:
     image: jonasal/nginx-certbot
+    restart: always
     environment:
       - CERTBOT_EMAIL=abc@yopmail.com
-      - STAGING=0
     ports:
       - 80:80
       - 443:443
-      # - 8080:8080
     volumes:
       - certificates:/etc/letsencrypt
-      - wordpress:/var/www/html
+      - wordpress:/var/www/html:ro
       - ./nginx_conf.d:/etc/nginx/user_conf.d:ro
 
   wordpress:
     image: wordpress:php8.3-fpm
     restart: always
     environment:
-      - WORDPRESS_DB_HOST=database
-      - WORDPRESS_DB_USER=exampleuser
-      - WORDPRESS_DB_PASSWORD=examplepass
-      - WORDPRESS_DB_NAME=exampledb
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: exampleuser
+      WORDPRESS_DB_PASSWORD: examplepass
+      WORDPRESS_DB_NAME: exampledb
     volumes:
-      - wordpress:/usr/src/wordpress
+      - wordpress:/var/www/html
 
-  phpmyadmin:
-    image: phpmyadmin
-    environment:
-      - PMA_HOST=database
-
-  database:
+  db:
     image: mysql:8.0
     restart: always
     environment:
-      - MYSQL_DATABASE=exampledb
-      - MYSQL_USER=exampleuser
-      - MYSQL_PASSWORD=examplepass
-      - MYSQL_RANDOM_ROOT_PASSWORD=1
+      MYSQL_DATABASE: exampledb
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
     volumes:
-      - database:/var/lib/mysql
+      - db:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    environment:
+      - PMA_ARBITRARY=1
 
 volumes:
-  wordpress:
-  database:
   certificates:
+  wordpress:
+  db:
