@@ -17,10 +17,20 @@
     src: .env
     dest: /cloud-1
 
-- name: Upload Nginx configuration
-  copy:
-    src: nginx_conf.d
-    dest: /cloud-1
+- name: Include .env file
+  ansible.builtin.include_vars:
+    file: .env
+    name: env_vars
+
+- name: Generate configuration file
+  template:
+    src: nginx.conf.j2
+    dest: /cloud-1/nginx.conf
+  vars:
+    domain: "{{ env_vars.DOMAIN }}"
+    phpmyadmin_root: "/phpmyadmin"
+    phpmyadmin_host: "phpmyadmin"
+    wordpress_host: "wordpress"
 
 - name: Pull containers
   community.docker.docker_compose_v2_pull:

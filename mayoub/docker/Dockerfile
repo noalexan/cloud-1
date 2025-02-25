@@ -22,5 +22,4 @@ ENV		PATH="/root/.local/bin:${PATH}"
 
 RUN		chsh -s /bin/zsh root
 
-ENTRYPOINT	["zsh"]
-
+ENTRYPOINT	["/usr/bin/zsh"]
