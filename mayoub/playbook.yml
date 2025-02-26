@@ -1,9 +1,0 @@
----
-- name: The Playbook for a complete Wordress App
-  hosts: cloud1
-  roles:
-    - upgrading_apt_packages
-    - docker_installation
-    - setup_docker
-    - container_launch
-

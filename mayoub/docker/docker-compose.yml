@@ -1,8 +1,0 @@
-services:
-  cloud-1:
-    build: .
-    volumes:
-      - ~/.ssh:/root/.ssh
-    stdin_open: true
-    tty: true
-
